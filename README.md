@@ -13,7 +13,7 @@ Using this assets, Unity receives Json data from Zig Sim over the UDP protocol. 
 The data received is limited to the free version of ZigSim.
 
 ## Getting Started
-To start using this assets, you might try to execute ObjectRotationSample Scene. Before Run this scene, you have to confirm some settings.
+To start using this assets, you might try to execute ObjectRotationSample Scene. Before run this scene, you have to confirm some settings.
 
 1. Download ZigSim App for your mobile device from App store or Google Play.
 
