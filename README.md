@@ -1,33 +1,41 @@
-## ZigSimについて
+# ZigSimToolsforUnity
+
+Provides easy way to use Zig Sim on Unity.
+
+## About ZigSim
 
 https://zig-project.com
 
-## 本アセットについて
-本アセットはZigSimからUDP通信で送られてくるJsonフォーマットのセンサーデータをUnityで受信して利用するためのアセットです。Json Utilityを使うことで高速でJsonのパースを行い、ZigSimアプリから送られてくる全てのデータを格納できるようにしました。
+## Features
+Using this assets, Unity receives Json data from Zig Sim over the UDP protocol. This asset uses Json Utility. So you can deserialize quickly.
 
-注意: 無料版で使用できるデータに限られます。
+## Attention
+The data received is limited to the free version of ZigSim.
 
-## ObjectRotationSampleシーンを動かす
-ObjectRotationSampleシーンはUnity内のオブジェクトをスマホ(タブレット)の回転と同期させて回転させることができるサンプルシーンです。モバイルデバイスでZigSimアプリをダウンロードし、各種設定を確認します。
+## Getting Started
+To start using this assets, you might try to execute ObjectRotationSample Scene. Before Run this scene, you have to confirm some settings.
 
-Settings
-- DATA DESTINATION: OTHER APP
-- PROTOCOL: UDP
-- IP ADDRESS: PCのIPアドレス
-- PORT NUMBER: 50000
-- MESSAGE FORMAT: JSON
-- MESSAGE RATE: 30
-- DEVICE UUID: そのままで
-- COMPASS ANGLE: そのままで
-- BEACON: そのままで
+1. Download ZigSim App for your mobile device from App store or Google Play.
 
-Sensor
-- QUATERNION にチェックを入れる
+2. Launch the app. Press the Settings button and set as follows:
 
-以上で準備は完了です。Unityで ObjectRotationSample シーンを再生し、モバイルアプリでデータの送信を開始するとUnityシーン内のオブジェクトがモバイルデバイスの回転と同期して回転するようになります。
+    Settings
+   - DATA DESTINATION: OTHER APP
+   - PROTOCOL: UDP
+   - IP ADDRESS: Your PC's IP address.
+   - PORT NUMBER: 50000
+   - MESSAGE FORMAT: JSON
+   - MESSAGE RATE: 30
+   - DEVICE UUID: Don't edit
+   - COMPASS ANGLE: Don't edit
+   - BEACON: Don't edit
 
-## センサーデータの使い方
-`ZigSimDataManager`クラスはそれぞれのセンサーデータを引数にとるコールバック関数を持っています。
+3. Press the Sensor button and check only QUATERNION.
+
+4. Press Start button on Zig Sim and Run Unity scene. The Object starts rotating same as your mobile device.
+
+## How to use sensor data.
+The `ZigSimDataManager` class has a callback function that takes each sensor data as an argument.
 
 ```csharp
 public Action<Device, string> BasicDataCallBack;
@@ -42,9 +50,9 @@ public Action<MicLevel> MicLevelCallBack;
 public Action<Touch[]> TouchCallBack;
 ```
 
-このコールバック関数を使って受け取ったセンサーデータを他のクラスで利用することができます。なお、`ZigSimDataManager`クラスはシングルトンなクラスであるため、同一シーンであればどのクラスからでもアクセスできます。
+The sensor data received using this callback function can be used by other classes. Since the `ZigSimDataManager` class is a singleton class, it can be accessed from any class in the same scene.
 
-例) ObjectRotator.cs
+ex) ObjectRotator.cs
 ```csharp
 using UnityEngine;
 using ZigSim;
@@ -78,7 +86,7 @@ public class ObjectRotator : MonoBehaviour
 }
 ```
 
-基本データ
+Basic Data
 ```csharp
 ZigSimDataManager.Instance.BasicDataCallBack += (Device d, string timestamp) =>
 {
@@ -87,7 +95,7 @@ ZigSimDataManager.Instance.BasicDataCallBack += (Device d, string timestamp) =>
 };
 ```
 
-タッチセンサ
+Touch Sensor
 ```csharp
 ZigSimDataManager.Instance.TouchCallBack += (ZigSim.Touch[] touches) =>
 {
