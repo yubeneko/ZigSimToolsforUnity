@@ -12,6 +12,10 @@ Using this assets, Unity receives Json data from Zig Sim over the UDP protocol. 
 ## Attention
 The data received is limited to the free version of ZigSim.
 
+Because this asset rely on C# 6.0, required Unity version is after `Unity2017.1`. If you use this asset with `Unity2018.1` or earlier, you have to confirm that you use .NET 4.x scripting runtime. Please reference Edit > Project Settings > Player > Configuretion > Scripting Runtime Version.
+
+https://docs.microsoft.com/ja-jp/visualstudio/cross-platform/unity-scripting-upgrade?view=vs-2019
+
 ## Getting Started
 Install package(ZigSimToolsforUnity.unitypackage) is available in [ZigSimToolsforUnity/releases](https://github.com/yubeneko/ZigSimToolsforUnity/releases) page.
 
