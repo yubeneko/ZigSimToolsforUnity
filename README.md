@@ -55,7 +55,7 @@ The sensor data received using this callback function can be used by other class
 ex) ObjectRotator.cs
 ```csharp
 using UnityEngine;
-using ZigSim;
+using ZigSimTools;
 using Quaternion = UnityEngine.Quaternion;
 
 public class ObjectRotator : MonoBehaviour
@@ -65,7 +65,7 @@ public class ObjectRotator : MonoBehaviour
     void Start ()
     {
         ZigSimDataManager.Instance.StartReceiving ();
-        ZigSimDataManager.Instance.QuaternionCallBack += (ZigSim.Quaternion q) =>
+        ZigSimDataManager.Instance.QuaternionCallBack += (ZigSimTools.Quaternion q) =>
         {
             // Debug.Log (q.ToString ());
             var newQut = new Quaternion ((float) - q.x, (float) - q.z, (float) - q.y, (float) q.w);
@@ -97,7 +97,7 @@ ZigSimDataManager.Instance.BasicDataCallBack += (Device d, string timestamp) =>
 
 Touch Sensor
 ```csharp
-ZigSimDataManager.Instance.TouchCallBack += (ZigSim.Touch[] touches) =>
+ZigSimDataManager.Instance.TouchCallBack += (ZigSimTools.Touch[] touches) =>
 {
     var count = 0;
     foreach (var t in touches)
