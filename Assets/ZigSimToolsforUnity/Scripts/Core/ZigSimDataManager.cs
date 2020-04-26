@@ -20,8 +20,9 @@ namespace ZigSimTools
         public Action<MicLevel> MicLevelCallBack;
         public Action<Touch[]> TouchCallBack;
 
-        void Start ()
+        protected override void Awake ()
         {
+            base.Awake ();
             udpReceiver = new UdpReceiver (portNumber);
             var context = System.Threading.SynchronizationContext.Current;
 
