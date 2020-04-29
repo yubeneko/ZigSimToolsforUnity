@@ -8,6 +8,7 @@ namespace ZigSimTools
         [SerializeField]
         private int portNumber = 50000;
         private UdpReceiver udpReceiver;
+        private bool isInitialized;
 
         public Action<Device, string> BasicDataCallBack;
         public Action<Accel> AccelCallBack;
@@ -20,40 +21,44 @@ namespace ZigSimTools
         public Action<MicLevel> MicLevelCallBack;
         public Action<Touch[]> TouchCallBack;
 
-        protected override void Awake ()
-        {
-            base.Awake ();
-            udpReceiver = new UdpReceiver (portNumber);
-            var context = System.Threading.SynchronizationContext.Current;
-
-            udpReceiver.MessageReceived += (s, e) =>
-            {
-                context.Post (_ =>
-                {
-                    var zigsimData = JsonUtility.FromJson<ZigSimData> (e.Message);
-                    //Debug.Log (zigsimData.sensordata.ToString ());
-
-                    BasicDataCallBack?.Invoke (zigsimData.device, zigsimData.timestamp);
-                    AccelCallBack?.Invoke (zigsimData.sensordata.accel);
-                    GravityCallBack?.Invoke (zigsimData.sensordata.gravity);
-                    GyroCallBack?.Invoke (zigsimData.sensordata.gyro);
-                    QuaternionCallBack?.Invoke (zigsimData.sensordata.quaternion);
-                    CompassCallBack?.Invoke (zigsimData.sensordata.compass);
-                    PressureCallBack?.Invoke (zigsimData.sensordata.pressure);
-                    GpsCallBack?.Invoke (zigsimData.sensordata.gps);
-                    MicLevelCallBack?.Invoke (zigsimData.sensordata.miclevel);
-                    TouchCallBack?.Invoke (zigsimData.sensordata.touch);
-                }, null);
-            };
-
-            udpReceiver.Disconnected += (s, e) =>
-            {
-                Debug.Log ("udp client was closed.");
-            };
-        }
-
         public void StartReceiving ()
         {
+            void Initialize ()
+            {
+                udpReceiver = new UdpReceiver (portNumber);
+                var context = System.Threading.SynchronizationContext.Current;
+
+                udpReceiver.MessageReceived += (s, e) =>
+                {
+                    context.Post (_ =>
+                    {
+                        var zigsimData = JsonUtility.FromJson<ZigSimData> (e.Message);
+                        //Debug.Log (zigsimData.sensordata.ToString ());
+
+                        BasicDataCallBack?.Invoke (zigsimData.device, zigsimData.timestamp);
+                        AccelCallBack?.Invoke (zigsimData.sensordata.accel);
+                        GravityCallBack?.Invoke (zigsimData.sensordata.gravity);
+                        GyroCallBack?.Invoke (zigsimData.sensordata.gyro);
+                        QuaternionCallBack?.Invoke (zigsimData.sensordata.quaternion);
+                        CompassCallBack?.Invoke (zigsimData.sensordata.compass);
+                        PressureCallBack?.Invoke (zigsimData.sensordata.pressure);
+                        GpsCallBack?.Invoke (zigsimData.sensordata.gps);
+                        MicLevelCallBack?.Invoke (zigsimData.sensordata.miclevel);
+                        TouchCallBack?.Invoke (zigsimData.sensordata.touch);
+                    }, null);
+                };
+
+                udpReceiver.Disconnected += (s, e) =>
+                {
+                    Debug.Log ("udp client was closed.");
+                };
+            }
+
+            if (!isInitialized)
+            {
+                Initialize ();
+                isInitialized = true;
+            }
             udpReceiver.StartReceiving ();
         }
 

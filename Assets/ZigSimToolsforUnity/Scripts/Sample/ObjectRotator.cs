@@ -22,6 +22,11 @@ public class ObjectRotator : MonoBehaviour
     {
         transform.localRotation = targetRotation;
 
+        if (Input.GetKeyDown (KeyCode.S))
+        {
+            ZigSimDataManager.Instance.StartReceiving ();
+        }
+
         if (Input.GetKeyDown (KeyCode.Escape))
         {
             ZigSimDataManager.Instance.StopReceiving ();
